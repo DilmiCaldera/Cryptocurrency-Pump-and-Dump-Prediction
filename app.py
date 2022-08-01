@@ -1,36 +1,12 @@
-import datetime
-from matplotlib import ticker
 import numpy as np
 import pandas as pd
-from datetime import datetime
-from datetime import timedelta
-import time
 import pickle
 import torch
-import matplotlib.pyplot as plt
-from flask import Flask, request, jsonify, send_file
-from flask import Flask, request, render_template,Response
-#from flask_apscheduler import APScheduler
-
-import matplotlib.pyplot as plt
-from mplfinance.original_flavor import candlestick_ohlc
-import matplotlib.dates as mpdates
+from flask import Flask, request, render_template
 import io
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-import base64
-from matplotlib.ticker import StrMethodFormatter
-import matplotlib.ticker as mticker
-
-import mplfinance as mpl 
-
 import plotly.graph_objects as go
 import plotly.utils as p
 import json
-
-#import plotly.graph_objects as go
-from  matplotlib.colors import LinearSegmentedColormap
-
 from binance.client import Client
 
 
