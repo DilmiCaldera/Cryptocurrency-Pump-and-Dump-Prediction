@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pump and Dump Detection</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+  body {
+    font: 400 15px Lato, sans-serif;
+    line-height: 1.8;
+    color: #818181;
+  }
+  h2 {
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #303030;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  h4 {
+    font-size: 19px;
+    line-height: 1.375em;
+    color: #303030;
+    font-weight: 400;
+    margin-bottom: 30px;
+  }  
+  .jumbotron {
+    background-color: #586f7c;
+    color: #fff;
+    padding: 100px 25px;
+    font-family: Montserrat, sans-serif;
+  }
+  .jumbotron1 {
+    background-color: #586f7c;
+    color: #fff;
+    padding: 100px 25px;
+    font-family: Montserrat, sans-serif;
+    height: 1000px;
+  }
+  .card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}
+   
+  .container-fluid {
+    padding: 60px 50px;
+  }
+  .bg-grey {
+    background-color: #f4f4f9;
+  }
+  .logo-small {
+    color: #586f7c;
+    font-size: 50px;
+  }
+  .logo {
+    color: #586f7c;
+    font-size: 200px;
+  }
+  .thumbnail {
+    padding: 0 0 15px 0;
+    border: none;
+    border-radius: 0;
+  }
+  .thumbnail img {
+    width: 50%;
+    height: 50%;
+    margin-bottom: 10px;
+  }
+  .carousel-control.right, .carousel-control.left {
+    background-image: none;
+    color: #586f7c;
+  }
+  .carousel-indicators li {
+    border-color: #586f7c;
+  }
+  .carousel-indicators li.active {
+    background-color: #586f7c;
+  }
+  .item h4 {
+    font-size: 19px;
+    line-height: 1.375em;
+    font-weight: 400;
+    font-style: italic;
+    margin: 70px 0;
+  }
+  .item span {
+    font-style: normal;
+  }
+  .panel {
+    border: 1px solid #586f7c; 
+    border-radius:0 !important;
+    transition: box-shadow 0.5s;
+  }
+  .panel:hover {
+    box-shadow: 5px 0px 40px rgba(0,0,0, .2);
+  }
+  .panel-footer .btn:hover {
+    border: 1px solid #586f7c;
+    background-color: #f4f4f9 !important;
+    color: #586f7c;
+  }
+  .panel-heading {
+    color: #fff !important;
+    background-color: #586f7c !important;
+    padding: 25px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  .panel-footer {
+    background-color: white !important;
+  }
+  .panel-footer h3 {
+    font-size: 32px;
+  }
+  .panel-footer h4 {
+    color: #aaa;
+    font-size: 14px;
+  }
+  .panel-footer .btn {
+    margin: 15px 0;
+    background-color: #586f7c;
+    color: #fff;
+  }
+  .navbar {
+    margin-bottom: 0;
+    background-color: #586f7c;
+    z-index: 9999;
+    border: 0;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    letter-spacing: 4px;
+    border-radius: 0;
+    font-family: Montserrat, sans-serif;
+  }
+  .navbar li a, .navbar .navbar-brand {
+    color: #fff !important;
+  }
+  .navbar-nav li a:hover, .navbar-nav li.active a {
+    color: #586f7c !important;
+    background-color: #fff !important;
+  }
+  .navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+  }
+  footer .glyphicon {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #586f7c;
+  }
+  .slideanim {visibility:hidden;}
+  .slide {
+    animation-name: slide;
+    -webkit-animation-name: slide;
+    animation-duration: 1s;
+    -webkit-animation-duration: 1s;
+    visibility: visible;
+  }
+  @keyframes slide {
+    0% {
+      opacity: 0;
+      transform: translateY(70%);
+    } 
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+  @-webkit-keyframes slide {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(70%);
+    } 
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0%);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .col-sm-4 {
+      text-align: center;
+      margin: 25px 0;
+    }
+    .btn-lg {
+      width: 100%;
+      margin-bottom: 35px;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    .logo {
+      font-size: 150px;
+    }
+  }
+  .form-control {
+    height: 50%;
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color:#586f7c;
+    border-bottom: 2px solid rgb(255, 255, 255);
+    color: #fff;
+  }
+  .btn{
+    background-color: white;
+    color: black;
+    size: 10px;
+    border: 2px solid #586f7c;
+    height: 50%;
+    width: 100%;
+  }
+
+  </style>
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#myPage">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#home">HOME</a></li>
+        <li><a href="#about">ABOUT</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="jumbotron text-center">
+  <h1>Financial Market Pump and Dump Prediction</h1> 
+</div>
+
+<!-- Container (About Section) -->
+<div id="home" class="container-fluid">
+  <div class="row d-flex">
+    <div class="col-sm-3"><!--3-->
+        <!--h3 class="text-center font-weight-bold">Main function of this dashboard is, predicting pump and dump happening possibility of a selected cryptocurrency with that currency's important analytical details of real time-->
+        
+        <h3 class="text-justify font-weight-bold" style="font-family:Montserrat, sans-serif;">The main functions of this dashboard are predicting whether the real-time event of a selected coin related to Binance exchange is a Pump event or not and visualizing the price changes of that coin.
+        </h3>
+
+        <!--br-->
+        <!--br-->
+        <!--br-->
+
+        <div class="card" style="width: 34.5rem;">
+            <div class="card-body text-dark text-center">
+                <form action="/result" method="POST">
+                    <div class="form-group align-items-center">
+                        <label for="coin"><h2 class="card-title text-center">Select The Coin</h2></label>
+                        <select class="form-control" id="coin" name="coin" style="font-size: 20px;">
+                            <option disabled selected value>  </option>
+                            <option value="ADX">ADX</option>
+                            <!--option value="AMB">AMB</option-->
+                            <option value="APPC">APPC</option>
+                            <!--option value="ARDR">ARDR</option-->
+                            <option value="ARN">ARN</option>
+                            <option value="AST">AST</option>
+                            <option value="BCD">BCD</option>
+                            <option value="BCPT">BCPT</option>
+                            <option value="BLZ">BLZ</option>
+                            <option value="BNT">BNT</option>
+                            <option value="BQX">BQX</option>
+                            <option value="BRD">BRD</option>
+                            <!--option value="BTS">BTS</option-->
+                            <option value="CDT">CDT</option>
+                            <option value="CHAT">CHAT</option>
+                            <option value="CLOAK">CLOAK</option>
+                            <option value="CND">CND</option>
+                            <option value="CTXC">CTXC</option>
+                            <!--option value="CVC">CVC</option-->
+                            <option value="DATA">DATA</option>
+                            <option value="DGD">DGD</option>
+                            <option value="DLT">DLT</option>
+                            <option value="DNT">DNT</option>
+                            <option value="DUSK">DUSK</option>
+                            <option value="EDO">EDO</option>
+                            <option value="ELF">ELF</option>
+                            <option value="EVX">EVX</option>
+                            <option value="FUEL">FUEL</option>
+                            <option value="GNT">GNT</option>
+                            <option value="GRS">GRS</option>
+                            <option value="GTO">GTO</option>
+                            <option value="GVT">GVT</option>
+                            <option value="GXS">GXS</option>
+                            <option value="HC">HC</option>
+                            <option value="ICN">ICN</option>
+                            <option value="IDEX">IDEX</option>
+                            <option value="INS">INS</option>
+                            <option value="KMD">KMD</option>
+                            <option value="LRC">LRC</option>
+                            <option value="LUN">LUN</option>
+                            <option value="MDA">MDA</option>
+                            <option value="MITH">MITH</option>
+                            <option value="MOD">MOD</option>
+                            <option value="MTH">MTH</option>
+                            <option value="NAS">NAS</option>
+                            <option value="NAV">NAV</option>
+                            <option value="NEBL">NEBL</option>
+                            <option value="NULS">NULS</option>
+                            <option value="NXS">NXS</option>
+                            <option value="OAX">OAX</option>
+                            <option value="ONG">ONG</option>
+                            <option value="OST">OST</option>
+                            <option value="PIVX">PIVX</option>
+                            <option value="PNT">PNT</option>
+                            <option value="POA">POA</option>
+                            <option value="POLY">POLY</option>
+                            <option value="POWR">POWR</option>
+                            <option value="PPT">PPT</option>
+                            <!--option value="QLC">QLC</option-->
+                            <!--option value="QSP">QSP</option-->
+                            <option value="RCN">RCN</option>
+                            <option value="RDN">RDN</option>
+                            <option value="REN">REN</option>
+                            <option value="REQ">REQ</option>
+                            <option value="RLC">RLC</option>
+                            <option value="SNGLS">SNGLS</option>
+                            <option value="SNM">SNM</option>
+                            <option value="SNT">SNT</option>
+                            <option value="STEEM">STEEM</option>
+                            <option value="STORJ">STORJ</option>
+                            <option value="STPT">STPT</option>
+                            <option value="SUB">SUB</option>
+                            <option value="SYS">SYS</option>
+                            <!--option value="TCT">TCT</option-->
+                            <option value="TNB">TNB</option>
+                            <option value="TNT">TNT</option>
+                            <option value="VIA">VIA</option>
+                            <!--option value="VIB">VIB</option-->
+                            <option value="VIBE">VIBE</option>
+                            <option value="VITE">VITE</option>
+                            <option value="WABI">WABI</option>
+                            <option value="WINGS">WINGS</option>
+                            <option value="WPR">WPR</option>
+                            <option value="XZC">XZC</option>
+                            <option value="YOYO">YOYO</option>
+                        </select>
+                        <br>
+                        <button type="submit" value="Submit" class="btn btn-primary mb-2" style="height:80px;"><h2 class="card-title text-center d-flex align-items-center;">CHECK</h2></button>
+                      </div>
+                </form>
+            </div>
+          </div>
+      </div>
+    <div class="col-sm-9"><!--9-->
+
+            <div class="row text-center align-self-center">
+              
+              <div class="col-sm-8"><!--9-->
+              
+                <div class="card" style="width: 700px;" >
+                 
+                  
+                    <div class="card-body d-flex align-items-center justify-content-center font-weight-bold" style="height:490px; color:#2f4550; font-size:250%; font-family:Montserrat, sans-serif;">
+                      CURRENT PREDICTION : {{ prediction }}
+                      <div class"chart" id="plotly-indicator">
+                      
+                        <script>
+                        var graph = {{ url_ | safe }};
+                        Plotly.plot('plotly-indicator', graph, {});
+                        </script></div>
+                      </div>
+                      
+                        
+                  </div>
+                </div>
+                <div class="col-sm-4"> 
+
+                  <div class="card align-items-center d-flex justify-content-center text-center vcenter" style="width: 320px; background-color:#b8dbd9; height:491px;  border-radius: 10px; overflow: hidden;" >
+                
+                    <div class="card-body align-items-center d-flex justify-content-center text-center vcenter" style="background-color: #b8dbd9;
+                    color:black;
+                    font-family: Montserrat, sans-serif; font-size:170%;">
+                      {{ description }}
+                      </div>
+                    
+                  </div>  
+                </div>
+          </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+    <div class="row d-flex">
+      <div class="col-sm-9">
+          <div class="container" style="width: 1050px; background-color:#586f7c; border-radius: 10px; overflow: hidden;">
+          
+            <div class="jumbotron1 text-center">
+              <h3 style="color:white; font-size:250%;">CURRENCY PRICE CHANGE OF LAST 5 DAYS</h3>
+              <br>
+              <div class="text-center" style="border-radius: 10px; overflow: hidden;">
+                <div id="plotly-timeseries"></div>
+                <script>
+                var graph = {{ url | safe }};
+                Plotly.plot('plotly-timeseries', graph, {});
+                </script></div>
+              </p>
+            </div>
+          </div>
+      </div>
+      <div class="col-sm-3"> <!--col-sm-3-->
+        <div class="row d-flex">
+        <div class="card align-items-center d-flex justify-content-center text-center" style="width: 320px; background-color:#b8dbd9; height:450px;  border-radius: 10px; overflow: hidden;" >
+       
+        
+          <div class="card-body align-items-center d-flex justify-content-center text-center" style="background-color: #b8dbd9;
+          color:black;
+          font-family: Montserrat, sans-serif; font-size:170%;">
+            {{ description_plot }}
+            </div>
+            
+              
+        </div>  
+      </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div id="disclaimer" class="container-fluid text-center bg-grey">
+<div class="card bg-dark" style="width: 100rem;">
+  <div class="card-body ">
+    <h2>Disclaimer</h2>
+    <h3>No Investment Advice</h3>
+    <h4 class="card-text">The information provided on this website does not constitute investment advice, financial advice, trading advice, or any other sort of advice and you should not treat any of the website's content as such. Alternative.me does not recommend that any cryptocurrency should be bought, sold, or held by you. Do conduct your own due diligence and consult your financial advisor before making any investment decisions.</h4>
+  </div>
+</div></div>
+
+<br>
+
+<!-- Container (Portfolio Section) -->
+<div id="about" class="container-fluid text-center bg-grey">
+  <h2>About</h2><br>
+  <div class="row text-center slideanim">
+    <div class="col-sm-3">
+      <div class="thumbnail bg-grey">
+        <img src="{{url_for('static', filename='Ishan.jpg')}}" alt="Ishan" width="400" height="300">
+        <p><strong>Ishan Fernando</strong></p>
+        <!-- <p>Yes, we built Paris</p> -->
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="thumbnail bg-grey">
+        <img src="{{url_for('static', filename='Dilmi.jpg')}}" alt="Dilmi" width="400" height="300">
+        <p><strong>Dilmi Caldera</strong></p>
+        <!-- <p>We built New York</p> -->
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="thumbnail bg-grey">
+        <img src="{{url_for('static', filename='Dileesha.jpg')}}" alt="Dileesha" width="400" height="300">
+        <p><strong>Dileesha Kannangara</strong></p>
+        <!-- <p>Yes, San Fran is ours</p> -->
+      </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="thumbnail bg-grey">
+          <img src="{{url_for('static', filename='Mugunthan.jpg')}}" alt="Mugunthan" width="400" height="300">
+          <p><strong>Mugunthan Shandirasegaran</strong></p>
+          <!-- <p>Yes, San Fran is ours</p> -->
+        </div>
+      </div>
+  </div><br>
+  <p>We are a group of 4 interns from the Department of Electronic and Telecommunication Engineering, Faculty of Engineering, University of Moratuwa. This dashboard is developed to assist potential investors/users to find out real time Pump and Dump schemes and stay away from those market manipulations. </p>
+</div>
+
+
+
+
+<!-- Image of location/map -->
+<!--img src="/w3images/map.jpg" class="w3-image w3-greyscale-min" style="width:100%"-->
+
+<footer class="container-fluid text-center">
+  <a href="#myPage" title="To Top">
+    <span class="glyphicon glyphicon-chevron-up"></span>
+  </a>
+  <p></a></p>
+</footer>
+
+
+
+
+
+<script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links in navbar + footer link
+  $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 900, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+  
+  $(window).scroll(function() {
+    $(".slideanim").each(function(){
+      var pos = $(this).offset().top;
+
+      var winTop = $(window).scrollTop();
+        if (pos < winTop + 600) {
+          $(this).addClass("slide");
+        }
+    });
+  });
+})
+</script>
+
+</body>
+</html>
