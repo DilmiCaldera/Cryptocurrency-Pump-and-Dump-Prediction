@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'PumpPrediction'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3DF89CAD11546F7A068F1282EE4A216 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9574BF870E59459085503954FD6DD819 }}
