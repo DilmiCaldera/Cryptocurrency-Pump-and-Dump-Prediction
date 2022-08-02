@@ -1,5 +1,6 @@
 binance==0.3
 Flask==2.2.0
+gunicorn==20.1.0
 numpy==1.22.3
 pandas==1.4.3
 plotly==5.9.0
