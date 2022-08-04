@@ -1,6 +1,9 @@
 ## Cryptocurrency Pump and Dump Prediction via Deep Learning
 
-Here we have trained a model to predict whether the real-time event of a selected asset in Binance exchange is a Pump event or not. Further we have developed a dashboard in which users can find out real-time pump and dump scenarios and probability of that scenario happening of a selected asset.
+Here we have trained a model to predict whether the real-time event of a selected asset in Binance exchange is a Pump event or not. 
+
+Further we have developed a dashboard in which users can find out real-time pump scenarios, probability of that scenario happening, and the price changes of the recent days of that selected asset.
+
 
 We referred several research papers. 
 1.  "**[Crypto Pump and Dump Detection via Deep Learning Techniques](https://arxiv.org/abs/2205.04646)**" by Viswanath Chadalapaka, Kyle Chang, Gireesh Mahajan, and Anuj Vasil.
