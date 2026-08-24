@@ -8,14 +8,11 @@ import plotly.graph_objects as go
 import plotly.utils as p
 import json
 from binance.client import Client
+import os
 
-
-api_key = 'EgOzpBslsLvGa4g2iSF9TR4CJIevxLZdygNwYUakavv5aGP8eGCGvW7iGCcvvAZ8'
-
-api_secret = 'Do5zqOduTJCxIwp9V0BfFwxOk0ta9XkF6XsbZPxBJSm8Y6zVvjKjqmtVijgToHYE'
-
+api_key = os.environ["BINANCE_API_KEY"]
+api_secret = os.environ["BINANCE_API_SECRET"]
 client = Client(api_key, api_secret)
-
 
 def std_rush_order_feature(df_buy, time_freq, rolling_freq):
     df_buy = df_buy.groupby(df_buy.index).count()
