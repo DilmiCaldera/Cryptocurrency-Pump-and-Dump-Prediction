@@ -407,6 +407,6 @@ def uploaded_image(filename):
     return render_template("home1.html", name=None)
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)                          
+    app.run(port=5000, debug=False)                          
 
 
